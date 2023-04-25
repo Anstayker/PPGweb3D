@@ -24,9 +24,21 @@ light.target.position.set(-5, 0, 0);
 scene.add(light);
 scene.add(light.target);
 
+scene.background = new THREE.Color('#FFFFFF')
+
 const loader = new GLTFLoader();
 
 loader.load( 'monaPrueba.glb', function ( gltf ) {
+
+	scene.add( gltf.scene );
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+
+loader.load( 'cartoon_lowpoly_small_city_free_pack.glb', function ( gltf ) {
 
 	scene.add( gltf.scene );
 
