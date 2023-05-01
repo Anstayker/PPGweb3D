@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>three.js webaudio - orientation!!</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="musica.css">
+</head>
+
+<body>
+    <!--musica a reproducir-->
+    <audio loop id="music" preload="auto" style="display: none">
+        <source src="sounds/376737_Skullbeatz___Bad_Cat_Maste.ogg" type="audio/ogg">
+        <source src="sounds/376737_Skullbeatz___Bad_Cat_Maste.mp3" type="audio/mpeg">
+    </audio>
+
+    <!--pantalla de inicio-->
+    <div id="overlay">
+        <button id="startButton">Play</button>
+    </div>
+
+    <!--informacion del artista y la fuente-->
+    <div id="container"></div>
+
+    <!-- <div id="info">
+        <a href="https://threejs.org" target="_blank" rel="noopener noreferrer">three.js</a> webaudio -
+        orientation<br />
+        music by <a href="http://www.newgrounds.com/audio/listen/376737" target="_blank"
+            rel="noopener noreferrer">skullbeatz</a>
+    </div> -->
+
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.151.3/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.151.3/examples/jsm/"
+          }
+        }
+    </script>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="module" src="/musica.js"></script>
+
+</body>
+
+</html>
