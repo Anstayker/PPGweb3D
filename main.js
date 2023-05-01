@@ -1,156 +1,255 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MarchingCubes } from 'three/addons/objects/MarchingCubes.js';
+//import { VRButton } from 'three/addons/webxr/VRButton.js';
 
-function main() {
+let container;
+let camera, scene, renderer;
+let controller1, controller2;
 
-	const canvas = document.querySelector('#c');
-	const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
-	renderer.outputEncoding = THREE.sRGBEncoding;
-	
-	const fov = 45;
-	const aspect = 2;  // the canvas default
-	const near = 0.1;
-	const far = 100;
-	const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-	camera.position.set(0, 10, 20);
+let controls, blob;
 
-	const controls = new OrbitControls(camera, canvas);
-	controls.target.set(0, 5, 0);
-	controls.update();  
+let points = [];
 
-	const scene = new THREE.Scene();
-	scene.background = new THREE.Color('#DEFEFF');
+init();
+initBlob();
+animate();
 
-	
-	{
-		const skyColor = 0xB1E1FF;
-		const groundColor = 0xB97A20;
-		const intensity = 0.6;
-		const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-		scene.add(light);
-	  }
+function init() {
 
-	{
-		const color = 0xFFFFFF;
-		const intensity = 0.8;
-		const light = new THREE.DirectionalLight(color, intensity);
-		light.position.set(5, 10, 2);
-		scene.add(light);
-		scene.add(light.target);
-	}
+    container = document.createElement('div');
+    document.body.appendChild(container);
 
-	function frameArea(sizeToFitOnScreen, boxSize, boxCenter, camera) {
-		const halfSizeToFitOnScreen = sizeToFitOnScreen * 0.5;
-		const halfFovY = THREE.MathUtils.degToRad(camera.fov * .5);
-		const distance = halfSizeToFitOnScreen / Math.tan(halfFovY);
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x222222);
 
-		const direction = (new THREE.Vector3())
-			.subVectors(camera.position, boxCenter)
-			.multiply(new THREE.Vector3(1, 0, 1))
-			.normalize();
-	
-		camera.position.copy(direction.multiplyScalar(distance).add(boxCenter));
-	
-		camera.near = boxSize / 100;
-		camera.far = boxSize * 100;
-	
-		camera.updateProjectionMatrix();
-	
-		camera.lookAt(boxCenter.x, boxCenter.y, boxCenter.z);
-	  }
-	
-	  {
-		const gltfLoader = new GLTFLoader();
-		gltfLoader.load('cartoon_lowpoly_small_city_free_pack.glb', (gltf) => {
-		  const root = gltf.scene;
-		  scene.add(root);
-	
-		  const box = new THREE.Box3().setFromObject(root);
-	
-		  const boxSize = box.getSize(new THREE.Vector3()).length();
-		  const boxCenter = box.getCenter(new THREE.Vector3());
-	
-		  frameArea(boxSize * 0.5, boxSize, boxCenter, camera);
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
+    camera.position.set(0, 1.0, 4);
 
-		  controls.maxDistance = boxSize * 10;
-		  controls.target.copy(boxCenter);
-		  controls.update();
-		});
-	  }
+    controls = new OrbitControls(camera, container);
+    controls.target.set(0, 1.6, 0);
+    controls.update();
+    
+    //Creacion Cubo
+    const tableGeometry = new THREE.BoxGeometry(0.5, 0.8, 0.5);
+    const tableMaterial = new THREE.MeshStandardMaterial({
+        color: 0x444444,
+        roughness: 1.0,
+        metalness: 0.0
+    });
+    const table = new THREE.Mesh(tableGeometry, tableMaterial);
+    table.position.x = 1.20;
+    table.position.y = 0.50;
+    table.position.z = 0.85;
+    scene.add(table);
 
-	  function resizeRendererToDisplaySize(renderer) {
-		const canvas = renderer.domElement;
-		const width = canvas.clientWidth;
-		const height = canvas.clientHeight;
-		const needResize = canvas.width !== width || canvas.height !== height;
-		if (needResize) {
-		  renderer.setSize(width, height, false);
-		}
-		return needResize;
-	  }
+    //Creacion Cubo 2
+    const tableGeometry2 = new THREE.BoxGeometry(0.5, 0.8, 0.5);
+    const tableMaterial2 = new THREE.MeshStandardMaterial({
+        color: 0xff0000,
+        roughness: 1.0,
+        metalness: 0.0
+    });
+    const table2 = new THREE.Mesh(tableGeometry2, tableMaterial2);
+    table.position.x = -1.20;
+    table.position.y = 0.35;
+    table.position.z = 0.85;
+    scene.add(table2);
 
-	  function render() {
-		if (resizeRendererToDisplaySize(renderer)) {
-		  const canvas = renderer.domElement;
-		  camera.aspect = canvas.clientWidth / canvas.clientHeight;
-		  camera.updateProjectionMatrix();
-		}
-	
-		renderer.render(scene, camera);
-	
-		requestAnimationFrame(render);
-	  }
-	
-	  requestAnimationFrame(render);
+    //Suelo Creacion
+    const floorGometry = new THREE.PlaneGeometry(4, 4);
+    const floorMaterial = new THREE.MeshStandardMaterial({
+        color: 0x888888,
+        roughness: 1.0,
+        metalness: 0.0
+    });
+    const floor = new THREE.Mesh(floorGometry, floorMaterial);
+    floor.rotation.x = - Math.PI / 2;
+    scene.add(floor);
 
-/*
-	const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-	const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-	const cube = new THREE.Mesh( geometry, material );
-	scene.add( cube );
-	
-	camera.position.z = 5;
-	
-	const color = 0xFFFFFF;
-	const intensity = 1;
-	const light = new THREE.DirectionalLight(color, intensity);
-	light.position.set(0, 10, 0);
-	light.target.position.set(-5, 0, 0);
-	scene.add(light);
-	scene.add(light.target);
-	
-	scene.background = new THREE.Color('#FFFFFF')
-*/
-	
-	const loader = new GLTFLoader();
-	
-	loader.load( 'monaPrueba.glb', function ( gltf ) {
-	
-		scene.add( gltf.scene );
-	
-	}, undefined, function ( error ) {
-	
-		console.error( error );
-	
-	} );
-	
-	/*
+    const grid = new THREE.GridHelper(10, 20, 0x111111, 0x111111);
+    // grid.material.depthTest = false; // avoid z-fighting
+    scene.add(grid);
 
-	function animate() {
-		requestAnimationFrame( animate );
-	
-		cube.rotation.x += 0.01;
-		cube.rotation.y += 0.01;
-	
-		renderer.render( scene, camera );
-	}
-	
-	animate();
+    scene.add(new THREE.HemisphereLight(0x888877, 0x777788));
 
-	*/
-	
+    const light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(0, 6, 0);
+    scene.add(light);
+
+    //
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.xr.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    //document.body.appendChild(VRButton.createButton(renderer));
+
+    // controllers
+
+    function onSelectStart() {
+
+        this.userData.isSelecting = true;
+
+    }
+
+    function onSelectEnd() {
+
+        this.userData.isSelecting = false;
+
+    }
+
+    controller1 = renderer.xr.getController(0);
+    controller1.addEventListener('selectstart', onSelectStart);
+    controller1.addEventListener('selectend', onSelectEnd);
+    controller1.userData.id = 0;
+    scene.add(controller1);
+
+    controller2 = renderer.xr.getController(1);
+    controller2.addEventListener('selectstart', onSelectStart);
+    controller2.addEventListener('selectend', onSelectEnd);
+    controller2.userData.id = 1;
+    scene.add(controller2);
+
+    //
+
+    const geometry = new THREE.CylinderGeometry(0.01, 0.02, 0.08, 5);
+    geometry.rotateX(- Math.PI / 2);
+    const material = new THREE.MeshStandardMaterial({ flatShading: true });
+    const mesh = new THREE.Mesh(geometry, material);
+
+    const pivot = new THREE.Mesh(new THREE.IcosahedronGeometry(0.01, 3));
+    pivot.name = 'pivot';
+    pivot.position.z = - 0.05;
+    mesh.add(pivot);
+
+    controller1.add(mesh.clone());
+    controller2.add(mesh.clone());
+
+    //
+
+    window.addEventListener('resize', onWindowResize);
+
 }
 
-main();
+function initBlob() {
+
+    /*
+    let path = "textures/cube/SwedishRoyalCastle/";
+    let format = '.jpg';
+    let urls = [
+        path + 'px' + format, path + 'nx' + format,
+        path + 'py' + format, path + 'ny' + format,
+        path + 'pz' + format, path + 'nz' + format
+    ];
+
+    let reflectionCube = new CubeTextureLoader().load( urls );
+    */
+
+    const material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        // envMap: reflectionCube,
+        roughness: 0.9,
+        metalness: 0.0,
+        transparent: true
+    });
+
+    blob = new MarchingCubes(64, material, false, false, 500000);
+    blob.position.y = 1;
+    scene.add(blob);
+
+    initPoints();
+
+}
+
+function initPoints() {
+
+    points = [
+        { position: new THREE.Vector3(), strength: 0.04, subtract: 10 },
+        { position: new THREE.Vector3(), strength: - 0.08, subtract: 10 }
+    ];
+
+}
+
+function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+}
+
+//
+
+function animate() {
+
+    renderer.setAnimationLoop(render);
+
+}
+
+function transformPoint(vector) {
+
+    vector.x = (vector.x + 1.0) / 2.0;
+    vector.y = (vector.y / 2.0);
+    vector.z = (vector.z + 1.0) / 2.0;
+
+}
+
+function handleController(controller) {
+
+    const pivot = controller.getObjectByName('pivot');
+
+    if (pivot) {
+
+        const id = controller.userData.id;
+        const matrix = pivot.matrixWorld;
+
+        points[id].position.setFromMatrixPosition(matrix);
+        transformPoint(points[id].position);
+
+        if (controller.userData.isSelecting) {
+
+            const strength = points[id].strength / 2;
+
+            const vector = new THREE.Vector3().setFromMatrixPosition(matrix);
+
+            transformPoint(vector);
+
+            points.push({ position: vector, strength: strength, subtract: 10 });
+
+        }
+
+    }
+
+}
+
+function updateBlob() {
+
+    blob.reset();
+
+    for (let i = 0; i < points.length; i++) {
+
+        const point = points[i];
+        const position = point.position;
+
+        blob.addBall(position.x, position.y, position.z, point.strength, point.subtract);
+
+    }
+
+}
+
+function render() {
+
+    handleController(controller1);
+    handleController(controller2);
+
+    updateBlob();
+
+    renderer.render(scene, camera);
+
+}
 
