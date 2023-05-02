@@ -24,8 +24,12 @@ const material = new THREE.MeshBasicMaterial({
 })
 
 const cube = new THREE.Mesh(geometry, material)
-cube.position.set(0, 0.5, -10)
+cube.position.set(0, -2.5, -10)
+cube.scale.set(0.5, 0.5, 0.5)
 scene.add(cube)
+
+camera.lookAt(cube.position)
+camera.position.set(0, 5, 0)
 
 window.addEventListener('resize', onWindowResize, false)
 
@@ -78,7 +82,87 @@ function scalePercent(start, end) {
 
 var animationScripts = [];
 
-//add an animation that flashes the cube through 100 percent of scroll
+animationScripts.push({
+    start: 0,
+    end: 5,
+    func: () => {
+
+        //camera.lookAt(cube.position)
+
+        const audioElement = document.getElementById('music1')
+        audioElement.pause()
+        
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.pause()
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.pause()
+    }
+})
+
+//-------------- Animation Controller --------------
+
+animationScripts.push({
+    start: 5,
+    end: 60,
+    func: () => {
+        //camera.lookAt(cube.position)
+        camera.position.z = lerp(0, -100, scalePercent(5, 60))
+        //console.log(camera.position.x + " " + camera.position.y + " " + camera.position.z)
+        
+    }
+})
+
+//-------------- Sound Controller --------------
+animationScripts.push({
+    start: 5,
+    end: 35,
+    func: () => {
+        const audioElement = document.getElementById('music1')
+        audioElement.play()
+        
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.pause()
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.pause()
+    }
+})
+
+animationScripts.push({
+    start: 33,
+    end: 65,
+    func: () => {
+        const audioElement = document.getElementById('music1')
+        audioElement.pause()
+        
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.play()
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.pause()
+    }
+})
+
+animationScripts.push({
+    start: 63,
+    end: 101,
+    func: () => {
+        const audioElement = document.getElementById('music1')
+        audioElement.pause()
+        
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.pause()
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.play()
+    }
+})
+
+
+
+/*
+
 animationScripts.push({
     start: 0,
     end: 101,
@@ -88,11 +172,11 @@ animationScripts.push({
         if (g <= 0) {
             g = 1.0
         }
-        material.color.g = g       
+        material.color.g = g     
+        
     },
 })
 
-//add an animation that moves the cube through first 40 percent of scroll
 animationScripts.push({
     start: 0,
     end: 20,
@@ -112,7 +196,6 @@ animationScripts.push({
     },
 })
 
-//add an animation that rotates the cube between 40-60 percent of scroll
 animationScripts.push({
     start: 20,
     end: 60,
@@ -135,7 +218,6 @@ animationScripts.push({
     },
 })
 
-//add an animation that moves the camera between 60-80 percent of scroll
 animationScripts.push({
     start: 60,
     end: 80,
@@ -155,7 +237,6 @@ animationScripts.push({
     },
 })
 
-//add an animation that auto rotates the cube from 80 percent of scroll
 animationScripts.push({
     start: 80,
     end: 101,
@@ -174,6 +255,8 @@ animationScripts.push({
         audioElement3.play()
     },
 })
+
+*/
 
 function playScrollAnimations() {
     animationScripts.forEach((a) => {
