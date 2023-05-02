@@ -6,6 +6,23 @@ const scene = new THREE.Scene();
 const gridHelper = new THREE.GridHelper(10, 10, 0xaec6cf, 0xaec6cf)
 scene.add(gridHelper)
 
+const startButton = document.getElementById('overlay');
+startButton.addEventListener('click', init);
+
+function init() {
+    const overlay = document.getElementById('overlay');
+    overlay.remove();
+
+    const audioElement = document.getElementById('music1')
+    audioElement.pause()
+
+    const audioElement2 = document.getElementById('music2')
+    audioElement2.pause()
+
+    const audioElement3 = document.getElementById('music3')
+    audioElement3.pause()
+}
+
 const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -36,13 +53,13 @@ window.addEventListener('resize', onWindowResize, false)
 
 const gltfLoader = new GLTFLoader();
 gltfLoader.load('models/StrokesScene.glb', (gltf) => {
-  const mesh = gltf.scene;
-  mesh.position.set(0, 0, 0);
-  mesh.scale.set(1, 1, 1);
+    const mesh = gltf.scene;
+    mesh.position.set(0, 0, 0);
+    mesh.scale.set(1, 1, 1);
 
 
-  scene.add(mesh);
-  animate();
+    scene.add(mesh);
+    animate();
 });
 
 {
@@ -51,7 +68,7 @@ gltfLoader.load('models/StrokesScene.glb', (gltf) => {
     const intensity = 0.6;
     const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
     scene.add(light);
-  }
+}
 
 {
     const color = 0xFFFFFF;
@@ -71,7 +88,7 @@ function onWindowResize() {
     render()
 }
 
-function lerp(x, y , a) {
+function lerp(x, y, a) {
     return (1 - a) * x + a * y
 }
 
@@ -91,10 +108,10 @@ animationScripts.push({
 
         const audioElement = document.getElementById('music1')
         audioElement.pause()
-        
+
         const audioElement2 = document.getElementById('music2')
         audioElement2.pause()
-        
+
         const audioElement3 = document.getElementById('music3')
         audioElement3.pause()
     }
@@ -109,7 +126,7 @@ animationScripts.push({
         //camera.lookAt(cube.position)
         camera.position.z = lerp(0, -100, scalePercent(5, 60))
         //console.log(camera.position.x + " " + camera.position.y + " " + camera.position.z)
-        
+
     }
 })
 
@@ -120,10 +137,10 @@ animationScripts.push({
     func: () => {
         const audioElement = document.getElementById('music1')
         audioElement.play()
-        
+
         const audioElement2 = document.getElementById('music2')
         audioElement2.pause()
-        
+
         const audioElement3 = document.getElementById('music3')
         audioElement3.pause()
     }
@@ -135,10 +152,10 @@ animationScripts.push({
     func: () => {
         const audioElement = document.getElementById('music1')
         audioElement.pause()
-        
+
         const audioElement2 = document.getElementById('music2')
         audioElement2.play()
-        
+
         const audioElement3 = document.getElementById('music3')
         audioElement3.pause()
     }
@@ -150,10 +167,10 @@ animationScripts.push({
     func: () => {
         const audioElement = document.getElementById('music1')
         audioElement.pause()
-        
+
         const audioElement2 = document.getElementById('music2')
         audioElement2.pause()
-        
+
         const audioElement3 = document.getElementById('music3')
         audioElement3.play()
     }
@@ -274,7 +291,7 @@ document.body.onscroll = () => {
                 document.body.scrollHeight) -
                 document.documentElement.clientHeight)) *
         100
-    ;
+        ;
 
 }
 
