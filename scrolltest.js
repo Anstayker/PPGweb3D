@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 
@@ -27,6 +28,37 @@ cube.position.set(0, 0.5, -10)
 scene.add(cube)
 
 window.addEventListener('resize', onWindowResize, false)
+
+
+const gltfLoader = new GLTFLoader();
+gltfLoader.load('object_066.glb', (gltf) => {
+  const mesh = gltf.scene;
+  mesh.position.set(0, 0, 0);
+  mesh.scale.set(1, 1, 1);
+
+
+  scene.add(mesh);
+  animate();
+});
+
+{
+    const skyColor = 0xB1E1FF;
+    const groundColor = 0xB97A20;
+    const intensity = 0.6;
+    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+    scene.add(light);
+  }
+
+{
+    const color = 0xFFFFFF;
+    const intensity = 0.8;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(5, 10, 2);
+    scene.add(light);
+    scene.add(light.target);
+}
+
+
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight
@@ -71,10 +103,10 @@ animationScripts.push({
         //console.log(cube.position.z)
         const audioElement = document.getElementById('music1')
         audioElement.play()
-        console.log('play musica')
+        //console.log('play musica')
         const audioElement2 = document.getElementById('music2')
         audioElement2.pause()
-        console.log('pause musica2')
+        //console.log('pause musica2')
     },
 })
 
@@ -110,10 +142,10 @@ animationScripts.push({
         //console.log(camera.position.x + " " + camera.position.y)
         const audioElement = document.getElementById('music1')
         audioElement.play()
-        console.log('play musica')
+        //console.log('play musica')
         const audioElement2 = document.getElementById('music2')
         audioElement2.pause()
-        console.log('pause musica2')
+        //console.log('pause musica2')
     },
 })
 
@@ -128,11 +160,11 @@ animationScripts.push({
 
         const audioElement = document.getElementById('music1')
         audioElement.pause()
-        console.log('play musica1')
+        //console.log('play musica1')
 
         const audioElement2= document.getElementById('music2')
         audioElement2.play()
-        console.log('pause musica2')
+        //console.log('pause musica2')
     },
 })
 
