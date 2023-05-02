@@ -78,11 +78,11 @@ animationScripts.push({
     end: 60,
     func: () => {
         camera.lookAt(cube.position)
-        //camera.position.set(0, 1, 2)
-        camera.position.x = lerp(0, -5, scalePercent(40, 60))
-        camera.position.y = lerp(1, -5, scalePercent(40, 60))
+        camera.position.set(0, 1, 2)
+        //camera.position.x = lerp(0, -5, scalePercent(40, 60))
+        //camera.position.y = lerp(1, -5, scalePercent(40, 60))
         cube.rotation.z = lerp(0, Math.PI, scalePercent(40, 60))
-        camera.position.set(camera.position.x, camera.position.y, camera.position.z)
+        //camera.position.set(camera.position.x, camera.position.y, camera.position.z)
         //console.log(cube.rotation.z)
     },
 })
