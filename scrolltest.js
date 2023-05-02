@@ -56,7 +56,7 @@ animationScripts.push({
         if (g <= 0) {
             g = 1.0
         }
-        material.color.g = g
+        material.color.g = g       
     },
 })
 
@@ -69,6 +69,12 @@ animationScripts.push({
         camera.position.set(0, 1, 2)
         cube.position.z = lerp(-10, 0, scalePercent(0, 40))
         //console.log(cube.position.z)
+        const audioElement = document.getElementById('music1')
+        audioElement.play()
+        console.log('play musica')
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.pause()
+        console.log('pause musica2')
     },
 })
 
@@ -84,6 +90,12 @@ animationScripts.push({
         cube.rotation.z = lerp(0, Math.PI, scalePercent(40, 60))
         camera.position.set(camera.position.x, camera.position.y, camera.position.z)
         //console.log(cube.rotation.z)
+        const audioElement = document.getElementById('music1')
+        audioElement.pause()
+        console.log('pause musica')
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.play()
+        console.log('play musica2')
     },
 })
 
@@ -96,6 +108,12 @@ animationScripts.push({
         camera.position.y = lerp(1, 5, scalePercent(60, 80))
         camera.lookAt(cube.position)
         //console.log(camera.position.x + " " + camera.position.y)
+        const audioElement = document.getElementById('music1')
+        audioElement.play()
+        console.log('play musica')
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.pause()
+        console.log('pause musica2')
     },
 })
 
@@ -107,6 +125,14 @@ animationScripts.push({
         //auto rotate
         cube.rotation.x += 0.01
         cube.rotation.y += 0.01
+
+        const audioElement = document.getElementById('music1')
+        audioElement.pause()
+        console.log('play musica1')
+
+        const audioElement2= document.getElementById('music2')
+        audioElement2.play()
+        console.log('pause musica2')
     },
 })
 
