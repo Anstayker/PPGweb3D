@@ -63,39 +63,43 @@ animationScripts.push({
 //add an animation that moves the cube through first 40 percent of scroll
 animationScripts.push({
     start: 0,
-    end: 40,
+    end: 20,
     func: () => {
         camera.lookAt(cube.position)
         camera.position.set(0, 1, 2)
-        cube.position.z = lerp(-10, 0, scalePercent(0, 40))
+        cube.position.z = lerp(-10, 0, scalePercent(0, 20))
         //console.log(cube.position.z)
         const audioElement = document.getElementById('music1')
-        audioElement.play()
-        console.log('play musica')
+        audioElement.pause()
+        
         const audioElement2 = document.getElementById('music2')
         audioElement2.pause()
-        console.log('pause musica2')
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.pause()
     },
 })
 
 //add an animation that rotates the cube between 40-60 percent of scroll
 animationScripts.push({
-    start: 40,
+    start: 20,
     end: 60,
     func: () => {
         camera.lookAt(cube.position)
         camera.position.set(0, 1, 2)
         //camera.position.x = lerp(0, -5, scalePercent(40, 60))
         //camera.position.y = lerp(1, -5, scalePercent(40, 60))
-        cube.rotation.z = lerp(0, Math.PI, scalePercent(40, 60))
+        cube.rotation.z = lerp(0, Math.PI, scalePercent(20, 60))
         //camera.position.set(camera.position.x, camera.position.y, camera.position.z)
         //console.log(cube.rotation.z)
         const audioElement = document.getElementById('music1')
-        audioElement.pause()
-        console.log('pause musica')
+        audioElement.play()
+        
         const audioElement2 = document.getElementById('music2')
-        audioElement2.play()
-        console.log('play musica2')
+        audioElement2.pause()
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.pause()
     },
 })
 
@@ -109,11 +113,13 @@ animationScripts.push({
         camera.lookAt(cube.position)
         //console.log(camera.position.x + " " + camera.position.y)
         const audioElement = document.getElementById('music1')
-        audioElement.play()
-        console.log('play musica')
+        audioElement.pause()
+        
         const audioElement2 = document.getElementById('music2')
-        audioElement2.pause()
-        console.log('pause musica2')
+        audioElement2.play()
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.pause()
     },
 })
 
@@ -128,11 +134,12 @@ animationScripts.push({
 
         const audioElement = document.getElementById('music1')
         audioElement.pause()
-        console.log('play musica1')
-
-        const audioElement2= document.getElementById('music2')
-        audioElement2.play()
-        console.log('pause musica2')
+        
+        const audioElement2 = document.getElementById('music2')
+        audioElement2.pause()
+        
+        const audioElement3 = document.getElementById('music3')
+        audioElement3.play()
     },
 })
 
